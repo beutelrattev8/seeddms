@@ -1,0 +1,42 @@
+# seeddms 5.1.8 -25.12.2018-
+version: '3.1'
+
+services:
+
+  seeddms-db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: bibbox
+      MYSQL_DATABASE: seeddms
+      MYSQL_USER: seeddms
+      MYSQL_PASSWORD: seeddms4bibbox
+    ports:
+      - 3306:3306
+    volumes:
+      - seeddms-mysql:/var/lib/mysql
+      
+  seeddms:
+    image: bibbox/seeddms
+    restart: always
+    ports:
+      - 9009:80
+    volumes:
+      - /docker-volumes/seeddms/var/www/seeddms51x/data:/var/www/seeddms51x/data
+      - seeddms-volumes:/var/www/seeddms51x/data/lucene
+      - seeddms-volumes:/var/www/seeddms51x/data/staging
+      - seeddms-volumes:/var/www/seeddms51x/conf
+      
+  busybox:
+    image: busybox
+    restart: always
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9008:8080
+      
+volumes:
+  seeddms-mysql:
+  seeddms-volumes:
